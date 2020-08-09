@@ -10,17 +10,18 @@ yum upgrade -y && yum update -y && yum autoremove -y
 yum-config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
 yum install epel-release -y
 yum install net-tools yum-utils htop -y
-yum install git gcc gcc-c++ nodejs gettext device-mapper-persistent-data lvm2 bzip2 python-pip -y
+yum install git gcc gcc-c++ nodejs gettext device-mapper-persistent-data lvm2 bzip2 python3-pip -y
 yum install ansible -y
 yum install docker-ce -y
 systemctl enable docker
 systemctl start docker
-pip install --upgrade pip
-pip install docker-compose
+pip3 install --upgrade pip
+pip3 install docker-compose
 cd /root/
 git clone --depth 50 https://github.com/ansible/awx.git
 cd awx/installer
 sed -i 's|admin_password=.*|admin_password=equiinfra|g' inventory
+sed -i 's#ansible_python_interpreter="/usr/bin/env python"#ansible_python_interpreter="/usr/bin/python3"#g' inventory
 grep -v '^#' inventory | grep -v '^$'
 
 ansible-playbook -i inventory install.yml
